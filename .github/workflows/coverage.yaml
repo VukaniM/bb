@@ -1,4 +1,4 @@
-name: Coverage
+name: Coverage.yaml
 
 on:
     pull_request:
