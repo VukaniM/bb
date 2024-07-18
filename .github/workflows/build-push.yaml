@@ -52,6 +52,6 @@ jobs:
         run: |
           # mkdir -p ~/.kube
            #echo $KUBE_CONFIG_DATA | base64 --decode > ~/.kube/config
-          kubectl apply -f ./kubernetes/service.yaml
+          kubectl apply -f .github/workflows/kubernetes/service.yaml
           kubectl rollout status deployment/$DEPLOYMENT_NAME
           kubectl get services -o wide
