@@ -10,14 +10,12 @@ on:
 env:
   REPO_NAME: vukanim/itm350-vukanim-bb
 
-
 jobs:
   if_merged:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo The PR was merged
+      - run: echo The PR was merged
 
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -45,13 +43,16 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
- # New step: Deploy to Kubernetes
-      - name: Deploy to Kubernetes
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v1
+        with:
+          version: 'latest'
+
+      - name: Get GKE credentials
+        run: gcloud container clusters get-credentials itm350-cluster --zone us-central1-f --project itm350-project
         env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}  # Base64-encoded kuybeconfig file
-        run: |
-          # mkdir -p ~/.kube
-           #echo $KUBE_CONFIG_DATA | base64 --decode > ~/.kube/config
-          kubectl apply -f .github/workflows/kubernetes/service.yaml
-          kubectl rollout status deployment/$DEPLOYMENT_NAME
-          kubectl get services -o wide
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Deploy to GKE
+        run: kubectl apply -f .github/workflows/kubernetes/service.yaml
