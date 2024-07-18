@@ -1,12 +1,11 @@
 name: Coverage
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    pull_request:
+        branches: 
+        - main
+        types:
+        - closed
 
 jobs:
   test:
@@ -14,27 +13,36 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14, 16]
+        node-version: ['14']
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Check current directory
+        run: pwd
 
-    - name: Install dependencies
-      run: npm install
+      - name: List root directory
+        run: ls -la
 
-    - name: Run tests
-      run: npm test -- --coverage --coverageDirectory=./coverage
+      - name: List workflow directory
+        run: ls -la ./.github/workflows
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
-      with:
-        files: ./coverage/*.json
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: true
+      - name: List bb directory
+        run: ls -la ./.github/workflows
+
+      - name: List bulletin-board-app directory
+        run: ls -la ./.github/workflows/bulletin-board-app
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./.github/workflows/bulletin-board-app
+
+      - name: Run tests
+        run: npm test
+        working-directory: ./.github/workflows/bulletin-board-app
