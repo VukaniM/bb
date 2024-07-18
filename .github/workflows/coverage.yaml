@@ -32,7 +32,7 @@ jobs:
         run: ls -la .github/workflows
 
       - name: List bulletin-board-app directory
-        run: ls -la .github/workflows/bulletin-board-app
+        run: ls -la bulletin-board-app
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
