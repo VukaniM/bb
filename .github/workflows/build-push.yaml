@@ -45,3 +45,11 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+ # New step: Deploy to Kubernetes
+      - name: Deploy to Kubernetes
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}  # Base64-encoded kubeconfig file
+        run: |
+          mkdir -p ~/.kube
+          echo $KUBE_CONFIG_DATA | base64 --decode > ~/.kube/config
+          kubectl apply -f path/to/your/kubernetes/service.yaml  # Replace with actual path
