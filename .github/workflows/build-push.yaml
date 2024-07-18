@@ -54,8 +54,8 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Set active account
-        run: gcloud auth activate-service-account --key-file=${{ secrets.GCP_SA_KEY }}
+      #- name: Set active account
+        #run: gcloud auth activate-service-account --key-file=${{ secrets.GCP_SA_KEY }}
 
       - name: Get GKE credentials
         run: gcloud container clusters get-credentials itm350-cluster --zone us-central1-f --project itm350-project
