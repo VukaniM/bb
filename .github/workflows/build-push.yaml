@@ -50,6 +50,6 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}  # Base64-encoded kubeconfig file
         run: |
-          mkdir -p ~/.kube
-          echo $KUBE_CONFIG_DATA | base64 --decode > ~/.kube/config
-          kubectl apply -f C:\Users\my pc\source\repos\Final/bb-apps-service.yaml  # Replace with actual path
+          kubectl apply -f C:\Users\my pc\source\repos\Final\bb-apps-service.yaml
+          kubectl rollout status deployment/$DEPLOYMENT_NAME
+          kubectl get services -o wide
