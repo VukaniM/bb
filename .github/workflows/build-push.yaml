@@ -52,7 +52,7 @@ jobs:
       - name: Get GKE credentials
         run: gcloud container clusters get-credentials itm350-cluster --zone us-central1-f --project itm350-project
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GKE_SA_KEY }}
 
       - name: Deploy to GKE
         run: kubectl apply -f .github/workflows/kubernetes/service.yaml
