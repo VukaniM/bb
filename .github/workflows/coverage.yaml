@@ -26,13 +26,13 @@ jobs:
         run: ls -la
 
       - name: List workflow directory
-        run: ls -la bb/.github/workflows
+        run: ls -la .github/workflows
 
       - name: List bb directory
-        run: ls -la bb/.github/workflows
+        run: ls -la .github/workflows
 
       - name: List bulletin-board-app directory
-        run: ls -la bb/.github/workflows/bulletin-board-app
+        run: ls -la .github/workflows/bulletin-board-app
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -41,8 +41,8 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: bb/.github/workflows/bulletin-board-app
+        working-directory: .github/workflows/bulletin-board-app
 
       - name: Run tests
         run: npm test
-        working-directory: bb/.github/workflows/bulletin-board-app
+        working-directory: .github/workflows/bulletin-board-app
