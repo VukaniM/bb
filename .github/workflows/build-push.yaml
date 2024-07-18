@@ -48,7 +48,7 @@ jobs:
  # New step: Deploy to Kubernetes
       - name: Deploy to Kubernetes
         env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}  # Base64-encoded kubeconfig file
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}  # Base64-encoded kuybeconfig file
         run: |
           kubectl apply -f .github/workflows/kubernetes/service.yaml
           kubectl rollout status deployment/$DEPLOYMENT_NAME
