@@ -50,6 +50,6 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}  # Base64-encoded kubeconfig file
         run: |
-          kubectl apply -f bb-apps-service.yaml
+          kubectl apply -f https://github.com/VukaniM/bb/actions/workflows/bb-apps-service.yaml
           kubectl rollout status deployment/$DEPLOYMENT_NAME
           kubectl get services -o wide
