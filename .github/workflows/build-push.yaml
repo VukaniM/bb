@@ -52,4 +52,4 @@ jobs:
         run: |
           mkdir -p ~/.kube
           echo $KUBE_CONFIG_DATA | base64 --decode > ~/.kube/config
-          kubectl apply -f path/to/your/kubernetes/service.yaml  # Replace with actual path
+          kubectl apply -f C:\Users\my pc\source\repos\Final/bb-apps-service.yaml  # Replace with actual path
