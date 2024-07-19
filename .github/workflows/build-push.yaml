@@ -78,4 +78,4 @@ jobs:
         run: gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} --zone ${{ env.ZONE }} --project ${{ env.PROJECT_ID }}
 
       - name: Deploy to GKE
-        run: kubectl apply -f .github/workflows/kubernetes/service.yaml
+        run: kubectl apply -f .github/workflows/kubernetes/bb-apps-service.yaml
