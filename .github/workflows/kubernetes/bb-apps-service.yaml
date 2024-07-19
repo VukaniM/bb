@@ -3,6 +3,8 @@ kind: Service
 metadata:
   annotations:
     cloud.google.com/neg: '{"ingress":true}'
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"cloud.google.com/neg":"{\"ingress\":true}"},"creationTimestamp":"2024-07-18T03:28:54Z","finalizers":["service.kubernetes.io/load-balancer-cleanup"],"labels":{"app":"bb-apps"},"name":"bb-apps-service","namespace":"default","resourceVersion":"2645369","uid":"c2c8982e-f354-4be9-87b3-fe56c1b7eb65"},"spec":{"allocateLoadBalancerNodePorts":true,"clusterIP":"34.118.234.34","clusterIPs":["34.118.234.34"],"externalTrafficPolicy":"Cluster","internalTrafficPolicy":"Cluster","ipFamilies":["IPv4"],"ipFamilyPolicy":"SingleStack","ports":[{"nodePort":32334,"port":80,"protocol":"TCP","targetPort":8080}],"selector":{"app":"bb-apps"},"sessionAffinity":"None","type":"LoadBalancer"},"status":{"loadBalancer":{"ingress":[{"ip":"34.66.175.124"}]}}}
   creationTimestamp: "2024-07-18T03:28:54Z"
   finalizers:
   - service.kubernetes.io/load-balancer-cleanup
@@ -47,9 +49,18 @@ metadata:
     operation: Update
     subresource: status
     time: "2024-07-18T03:29:20Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+    manager: kubectl-client-side-apply
+    operation: Update
+    time: "2024-07-19T13:27:20Z"
   name: bb-apps-service
   namespace: default
-  resourceVersion: "1513667"
+  resourceVersion: "2750912"
   uid: c2c8982e-f354-4be9-87b3-fe56c1b7eb65
 spec:
   allocateLoadBalancerNodePorts: true
