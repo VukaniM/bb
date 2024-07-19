@@ -1,39 +1,85 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const uuidv4 = require('uuid').v4;
+const statusCodes = require('http').STATUS_CODES;
+const httpConstants = require('http2').constants;
+
+// Include the AWS SDK module
 const AWS = require('aws-sdk');
-const api = require('./api');
+AWS.config.update({region: 'us-east-1'});
 
-jest.mock('aws-sdk', () => {
-  const mDocumentClient = {
-    put: jest.fn().mockReturnThis(),
-    scan: jest.fn().mockReturnThis(),
-    query: jest.fn().mockReturnThis(),
-    promise: jest.fn()
+// Instantiate a DynamoDB document client with the SDK
+let dynamodb = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+
+const app = express();
+app.use(bodyParser.json());
+
+const tableName = 'EventsTable'; // Replace with your DynamoDB table name
+
+// Fetch events
+app.get('/api/events', (req, res) => {
+  const params = {
+    TableName: tableName
   };
-  return { DynamoDB: { DocumentClient: jest.fn(() => mDocumentClient) } };
+
+  dynamodb.scan(params, (err, data) => {
+    if (err) {
+      console.error("Unable to scan the table. Error JSON:", JSON.stringify(err, null, 2));
+      res.status(500).send(err);
+    } else {
+      res.send(data.Items);
+    }
+  });
 });
 
-describe('api tests', () => {
-  let documentClient;
+// Add an event
+app.post('/api/events', (req, res) => {
+  const event = req.body;
+  event.id = uuidv4(); // Assign a unique ID to the event
 
-  beforeAll(() => {
-    documentClient = new AWS.DynamoDB.DocumentClient();
+  const params = {
+    TableName: tableName,
+    Item: event
+  };
+
+  dynamodb.put(params, (err, data) => {
+    if (err) {
+      console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+      res.status(500).send(err);
+    } else {
+      res.send(event);
+    }
   });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  test('should write data to DynamoDB', async () => {
-    const item = { id: '1', name: 'Test' };
-    documentClient.put().promise.mockResolvedValueOnce({});
-    
-    const result = await api.writeToDynamoDB(item);
-    
-    expect(documentClient.put).toHaveBeenCalledWith({
-      TableName: 'YourTableName',
-      Item: item
-    });
-    expect(result).toEqual({});
-  });
-
-  // Add more tests as needed for other functions
 });
+
+// Delete an event
+app.delete('/api/events/:id', (req, res) => {
+  const eventId = req.params.id;
+
+  const params = {
+    TableName: tableName,
+    Key: {
+      id: eventId
+    }
+  };
+
+  dynamodb.delete(params, (err, data) => {
+    if (err) {
+      console.error("Unable to delete item. Error JSON:", JSON.stringify(err, null, 2));
+      res.status(500).send(err);
+    } else {
+      res.send({ id: eventId });
+    }
+  });
+});
+
+// Start the server
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
+// Exports for testing or other purposes
+exports.events = app.get('/api/events');
+exports.event = app.post('/api/events');
+exports.deleteEvent = app.delete('/api/events/:id');
