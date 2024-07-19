@@ -1,7 +1,7 @@
 module.exports = {
     collectCoverage: true,
     collectCoverageFrom: [
-      './backend/**/*.js'
+      'bulletin-board-app/backend/**/*.js'
     ],
     coverageThreshold: {
       global: {
